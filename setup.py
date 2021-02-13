@@ -39,6 +39,7 @@ setup(
     name='ratio_dumper',
     description='Ratio iX5M Log Dumper',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/DiveWithDamian/ratio-dumper',
     packages=find_packages(),
     author='Damian Zaremba',
