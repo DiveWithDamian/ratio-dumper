@@ -39,10 +39,16 @@ class WaterType(Enum):
 
 
 class DecompressionAlgorithm(Enum):
-    Buhlman16B = 2
+    buhlmann_16b = 2
 
 
 class SoftwareVersion:
+    version: int
+    major: str
+    minor: str
+    patch: str
+    build: str
+
     def __init__(self, version: int) -> None:
         self.version: int = version
         self.major: str = f'{int((version / 10000000) % 100)}'
@@ -60,80 +66,98 @@ class SoftwareVersion:
 
 
 @dataclass(frozen=True)
+class GasMix:
+    o2_percentage: int
+    he_percentage: int
+
+    @property
+    def mix(self) -> str:
+        return f'{self.o2_percentage}/{self.he_percentage}'
+
+
+@dataclass(frozen=True)
+class DecompressionAlgorithmSettings:
+    buhlmann_gradient_factor_low: int
+    buhlmann_gradient_factor_high: int
+    vpm_r0: int
+
+
+@dataclass(frozen=True)
+class DiveDecompressionSettings:
+    decostop_depth_1: float
+    decostop_depth_2: float
+    decostop_step_1: int
+    decostop_step_2: int
+    decostop_step_3: int
+
+
+@dataclass(frozen=True)
 class DiveSample:
-    vbatCV: float
-    runtimeS: int
-    depthDm: float
-    temperatureDc: float
-    activeMixO2Percent: int
-    activeMixHePercent: int
-    suggestedMixO2Percent: int
-    suggestedMixHePercent: int
-    activeAlgorithm: DecompressionAlgorithm
-    buhlGfHigh: int
-    buhlGfLow: int
-    vpmR0: int
-    modeOCSCRCCRGauge: int
-    maxPPO2OrSetpoint: int
-    firstStopDepth: float
-    firstStopTime: int
-    NDLOrTTS: int
-    OTU: int
-    CNS: int
-    tissueGroup1Percent: int
-    tissueGroup2Percent: int
-    tissueGroup3Percent: int
-    tissueGroup4Percent: int
-    tissueGroup5Percent: int
-    tissueGroup6Percent: int
-    tissueGroup7Percent: int
-    tissueGroup8Percent: int
-    tissueGroup9Percent: int
-    tissueGroup10Percent: int
-    tissueGroup11Percent: int
-    tissueGroup12Percent: int
-    tissueGroup13Percent: int
-    tissueGroup14Percent: int
-    tissueGroup15Percent: int
-    tissueGroup16Percent: int
-    enabledMixSensors: int
-    setPointMode: int
-    tankPressure: int
-    compassLog: int
-    reserved2: int
+    battery_voltage: float
+    runtime_seconds: int
+    depth: float
+    temperature: float
+    active_mix: GasMix
+    suggested_mix: GasMix
+    active_algorithm: DecompressionAlgorithm
+    algorithm_settings: DecompressionAlgorithmSettings
+    mode_oc_scr_ccr_gauge: int
+    max_ppo2_or_setpoint: float
+    first_stop_depth: float
+    first_stop_time: int
+    ndl_or_tts: int
+    otu: int
+    cns: int
+    tissue_group1_percent: int
+    tissue_group2_percent: int
+    tissue_group3_percent: int
+    tissue_group4_percent: int
+    tissue_group5_percent: int
+    tissue_group6_percent: int
+    tissue_group7_percent: int
+    tissue_group8_percent: int
+    tissue_group9_percent: int
+    tissue_group10_percent: int
+    tissue_group11_percent: int
+    tissue_group12_percent: int
+    tissue_group13_percent: int
+    tissue_group14_percent: int
+    tissue_group15_percent: int
+    tissue_group16_percent: int
+    enabled_mix_sensors: int
+    set_point_mode: int
+    tank_pressure: int
+    compass_log: int
+    reserved_2: int
 
 
 @dataclass(frozen=True)
 class Dive:
-    activeUser: int
-    diveSamples: int
-    monotonicTimeS: int
-    UTCStartingTimeS: int
-    surfacePressureMbar: int
-    lastSurfaceTimeS: int
-    desaturationTimeS: int
-    depthMax: float
-    decostopDepth1Dm: float
-    decostopDepth2Dm: float
-    decostopStep1Dm: int
-    decostopStep2Dm: int
-    decostopStep3Dm: int
-    deepStopAlg: int
-    safetyStopDepthDm: float
-    safetyStopMin: int
-    diveMode: DiveMode
+    active_user: int
+    dive_sample_count: int
+    monotonic_time: int
+    utc_starting_time: int
+    surface_pressure: int
+    last_surface_time: int
+    desaturation_time: int
+    depth_max: float
+    decompression_settings: DiveDecompressionSettings
+    deep_stop_algorithm: int
+    safety_stop_depth: float
+    safety_stop_time: int
+    dive_mode: DiveMode
     water: WaterType
-    alarmsGeneral: int
-    alarmTime: int
-    alarmDepth: float
-    backlightLevel: int
-    backlightMode: int
-    softwareVersion: SoftwareVersion
-    alertFlag: int
-    freeUserSettings: int
-    timezoneIdx: int
-    avgDepth: float
-    dum6: int
-    dum7: int
-    dum8: int
+    alarms_general: int
+    alarm_time: int
+    alarm_depth: float
+    backlight_level: int
+    backlight_mode: int
+    software_version: SoftwareVersion
+    alert_flag: int
+    free_user_settings: int
+    timezone_id: int
+    avg_depth: float
+    dum_6: int
+    dum_7: int
+    dum_8: int
     samples: List[DiveSample]

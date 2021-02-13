@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 from ratio_dumper import SerialDriver
-from ratio_dumper.models import DiveMode, WaterType
+from ratio_dumper.models import DiveMode, WaterType, DecompressionAlgorithm
 from tests.utilities import MockSerialIO
 
 
@@ -191,16 +191,29 @@ def test_get_dive():
     })
     dive = sd.get_dive(1)
 
-    assert dive.diveSamples == 29
-    assert dive.avgDepth == 4.65
-    assert dive.diveMode == DiveMode.OC
-    assert dive.UTCStartingTimeS == 409911594
-    assert dive.lastSurfaceTimeS == 4294967295
-    assert dive.depthMax == 8.91
+    assert dive.dive_sample_count == 29
+    assert dive.avg_depth == 4.65
+    assert dive.dive_mode == DiveMode.OC
+    assert dive.utc_starting_time == 409911594
+    assert dive.last_surface_time == 4294967295
+    assert dive.depth_max == 8.91
     assert dive.water == WaterType.Fresh
 
-    assert dive.samples[0].runtimeS == 10
-    assert dive.samples[0].depthDm == 1.9
-    assert dive.samples[0].temperatureDc == 8.4
-    assert dive.samples[0].NDLOrTTS == 32767
-    assert dive.samples[0].vbatCV == 3.82
+    assert dive.samples[0].runtime_seconds == 10
+    assert dive.samples[0].depth == 1.9
+    assert dive.samples[0].temperature == 8.4
+    assert dive.samples[0].ndl_or_tts == 32767
+    assert dive.samples[0].battery_voltage == 3.82
+    assert dive.samples[0].max_ppo2_or_setpoint == 1.4
+
+    assert dive.samples[0].active_mix.o2_percentage == 21
+    assert dive.samples[0].active_mix.he_percentage == 0
+    assert dive.samples[0].active_mix.mix == '21/0'
+
+    assert dive.samples[0].suggested_mix.o2_percentage == 21
+    assert dive.samples[0].suggested_mix.he_percentage == 0
+    assert dive.samples[0].suggested_mix.mix == '21/0'
+
+    assert dive.samples[0].active_algorithm == DecompressionAlgorithm.buhlmann_16b
+    assert dive.samples[0].algorithm_settings.buhlmann_gradient_factor_high == 80
+    assert dive.samples[0].algorithm_settings.buhlmann_gradient_factor_low == 30
