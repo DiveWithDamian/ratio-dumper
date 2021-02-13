@@ -144,7 +144,7 @@ def convert_to_xml(dive: Dive) -> str:
 
     for sample in dive.samples:
         diveSample = SubElement(samples, "sample")
-        SubElement(diveSample, 'vbatCV').text = str(sample.vbatCV)
+        SubElement(diveSample, 'vbatCV').text = str(int(sample.vbatCV * 100))
         SubElement(diveSample, 'runtimeS').text = str(sample.runtimeS)
         SubElement(diveSample, 'depthDm').text = str(int(sample.depthDm * 10))
         SubElement(diveSample, 'temperatureDc').text = str(int(sample.temperatureDc * 10))

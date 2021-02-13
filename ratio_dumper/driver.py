@@ -125,7 +125,7 @@ class SerialDriver:
             raise RuntimeError(f'get_dive_sample got {error_code}')
 
         return DiveSample(
-            vbatCV=ByteConverter.to_uint16(payload.read(2)),
+            vbatCV=(ByteConverter.to_uint16(payload.read(2)) / 100.0),
             runtimeS=ByteConverter.to_uint32(payload.read(4)),
             depthDm=ByteConverter.to_uint16(payload.read(2)) / 10.0,
             temperatureDc=ByteConverter.to_uint16(payload.read(2)) / 10.0,

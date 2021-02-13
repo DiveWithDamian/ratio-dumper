@@ -57,7 +57,7 @@ class SoftwareVersion:
 
 @dataclass(frozen=True)
 class DiveSample:
-    vbatCV: int
+    vbatCV: float
     runtimeS: int
     depthDm: float
     temperatureDc: float

@@ -203,3 +203,4 @@ def test_get_dive():
     assert dive.samples[0].depthDm == 1.9
     assert dive.samples[0].temperatureDc == 8.4
     assert dive.samples[0].NDLOrTTS == 32767
+    assert dive.samples[0].vbatCV == 3.82
