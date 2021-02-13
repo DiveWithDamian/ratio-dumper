@@ -69,6 +69,9 @@ def list(ctx: click.Context) -> None:
 def export(ctx: click.Context, dive_id: int) -> None:
     with SerialDriver(ctx.obj['serial_path']) as dc:
         dive = dc.get_dive(dive_id)
+        if dive is None:
+            click.echo("Failed to read dive")
+            sys.exit(1)
 
     click.echo(convert_to_xml(dive))
 
@@ -79,10 +82,13 @@ def export(ctx: click.Context, dive_id: int) -> None:
 def download(ctx: click.Context, target_directory: str) -> None:
     with SerialDriver(ctx.obj['serial_path']) as dc:
         dive_ids = dc.get_dive_ids()
+        if dive_ids is None:
+            click.echo("Failed to read dive logs")
+            sys.exit(1)
 
-        if not dive_ids:
-            click.echo('No dive logs found')
-            return
+        if len(dive_ids) == 0:
+            click.echo('No dive logs to download')
+            sys.exit(0)
 
         click.echo('Exporting....')
         for dive_id in dive_ids:
@@ -93,6 +99,10 @@ def download(ctx: click.Context, target_directory: str) -> None:
 
             click.echo(f' - {dive_id}')
             dive = dc.get_dive(dive_id)
+            if dive is None:
+                click.echo("Failed to read dive")
+                sys.exit(1)
+
             with open(target_file.as_posix(), 'w') as fh:
                 fh.write(convert_to_xml(dive))
 

@@ -75,6 +75,8 @@ class SerialDriver:
         for option in options:
             payload += f'{option:02x}'
         payload += CrcHelper.encode(CrcHelper.calculate(bytes.fromhex(payload)))
+
+        logger.debug(f'Encoded payload: {payload}')
         return bytes.fromhex(payload)
 
     def _decode_payload(self, command: int) -> Tuple[BytesIO, Optional[int]]:
@@ -87,6 +89,9 @@ class SerialDriver:
         #  <variable> = byte, ACK or NAK marker
         #  <variable> = 2 bytes, CRC of the payload
         packet_header = self._serial.read(1)
+        if not packet_header:
+            return BytesIO(), -1
+
         assert packet_header[0] == 85
 
         packet_length = self._serial.read(1)
@@ -95,6 +100,7 @@ class SerialDriver:
 
         packet_body = self._serial.read(read_size + 2)
         assert len(packet_body) == read_size + 2
+        logger.debug(f'Decoded payload: {(packet_header + packet_length + packet_body).hex()}')
 
         payload, crc = packet_body[:read_size], packet_body[read_size:]
         expected_crc = CrcHelper.calculate(packet_header + packet_length + payload)
@@ -110,31 +116,36 @@ class SerialDriver:
         # NAK indicates an error
         # Return the first byte as the error code
         elif payload[-1] == 21:
-            return BytesIO(), (payload[1] & 255)
+            error_code = (payload[1] & 255)
+            logger.warning(f'Hit NAK marker: {error_code}')
+            return BytesIO(), error_code
 
         # Unknown response
         else:
-            raise ValueError(f'Unknown response: {payload}')
+            logger.critical(f'Unknown response: {payload}')
+            return BytesIO(), -1
 
-    def get_dive_ids(self) -> Set[int]:
+    def get_dive_ids(self) -> Optional[Set[int]]:
         '''Query a device for all dives.'''
         self._serial.write(self._encode_payload(120, [141]))
         payload, error_code = self._decode_payload(120)
         if error_code is not None:
-            raise RuntimeError(f'get_dive_ids got {error_code}')
+            logger.critical(f'get_dive_ids got {error_code}')
+            return None
 
         first_dive = ByteConverter.to_uint16(payload.read(2))
         last_dive = ByteConverter.to_uint16(payload.read(2))
         return set(range(first_dive, last_dive + 1))
 
-    def _get_dive_sample(self, sample_id: int) -> DiveSample:
+    def _get_dive_sample(self, sample_id: int) -> Optional[DiveSample]:
         """Query a device for a specific dive sample."""
         self._serial.write(self._encode_payload(122, [sample_id & 255, (sample_id >> 8) & 255]))
         payload, error_code = self._decode_payload(122)
         if error_code is not None:
-            raise RuntimeError(f'get_dive_sample got {error_code}')
+            logger.critical(f'get_dive_sample got {error_code}')
+            return None
 
-        return DiveSample(
+        sample = DiveSample(
             battery_voltage=(ByteConverter.to_uint16(payload.read(2)) / 100.0),
             runtime_seconds=ByteConverter.to_uint32(payload.read(4)),
             depth=ByteConverter.to_uint16(payload.read(2)) / 10.0,
@@ -186,13 +197,16 @@ class SerialDriver:
             compass_log=ByteConverter.to_int16(payload.read(2)),
             reserved_2=ByteConverter.to_int16(payload.read(2)),
         )
+        logger.debug(f"Decoded dive sample: {sample}")
+        return sample
 
-    def get_dive(self, dive_id: int) -> Dive:
+    def get_dive(self, dive_id: int) -> Optional[Dive]:
         '''Query a device for a specific dive.'''
         self._serial.write(self._encode_payload(121, [dive_id & 255, (dive_id >> 8) & 255]))
         payload, error_code = self._decode_payload(121)
         if error_code is not None:
-            raise RuntimeError(f'get_dive got {error_code}')
+            logger.critical(f'get_dive got {error_code}')
+            return None
 
         # Decode the segmentHeader
         dive = Dive(
@@ -231,9 +245,13 @@ class SerialDriver:
             dum_8=ByteConverter.to_uint8(payload.read(1)),
             samples=[],
         )
+        logger.debug(f"Decoded dive header: {dive}")
 
         # Decode the samples
         for sample_id in range(1, dive.dive_sample_count + 1):
-            dive.samples.append(self._get_dive_sample(sample_id))
+            sample = self._get_dive_sample(sample_id)
+            if sample is None:
+                return None
+            dive.samples.append(sample)
 
         return dive

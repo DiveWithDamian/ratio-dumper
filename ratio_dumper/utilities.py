@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
+import logging
 from xml.dom import minidom
 from xml.etree import ElementTree
 from xml.etree.cElementTree import Element, SubElement
@@ -30,6 +31,8 @@ from xml.etree.cElementTree import Element, SubElement
 from crcmod.predefined import mkCrcFun
 
 from .models import Dive
+
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class CrcHelper:
