@@ -131,7 +131,7 @@ def convert_to_xml(dive: Dive) -> str:
     SubElement(segmentHeader, 'alarmDepth').text = str(int(dive.alarmDepth * 100))
     SubElement(segmentHeader, 'backlightLevel').text = str(dive.backlightLevel)
     SubElement(segmentHeader, 'backlightMode').text = str(dive.backlightMode)
-    SubElement(segmentHeader, 'softwareVersion').text = str(dive.softwareVersion)
+    SubElement(segmentHeader, 'softwareVersion').text = str(dive.softwareVersion.as_numeric)
     SubElement(segmentHeader, 'alertFlag').text = str(dive.alertFlag)
     SubElement(segmentHeader, 'freeUserSettings').text = str(dive.freeUserSettings)
     SubElement(segmentHeader, 'timezoneIdx').text = str(dive.timezoneIdx)

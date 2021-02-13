@@ -32,7 +32,7 @@ from typing import Tuple, Set, List, Optional, Type
 
 from serial import Serial
 
-from .models import Dive, DiveSample, DiveMode, WaterType
+from .models import Dive, DiveSample, DiveMode, WaterType, SoftwareVersion
 from .utilities import ByteConverter, CrcHelper
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -199,7 +199,7 @@ class SerialDriver:
             alarmDepth=ByteConverter.to_uint16(payload.read(2)) / 100.0,
             backlightLevel=ByteConverter.to_uint8(payload.read(1)),
             backlightMode=ByteConverter.to_uint8(payload.read(1)),
-            softwareVersion=ByteConverter.to_uint32(payload.read(4)),
+            softwareVersion=SoftwareVersion(ByteConverter.to_uint32(payload.read(4))),
             alertFlag=ByteConverter.to_uint8(payload.read(1)),
             freeUserSettings=ByteConverter.to_uint8(payload.read(1)),
             timezoneIdx=ByteConverter.to_uint8(payload.read(1)),

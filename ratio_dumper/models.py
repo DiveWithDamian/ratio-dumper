@@ -38,6 +38,23 @@ class WaterType(Enum):
     Fresh = 1
 
 
+class SoftwareVersion:
+    def __init__(self, version: int) -> None:
+        self.version: int = version
+        self.major: str = f'{int((version / 10000000) % 100)}'
+        self.minor: str = f'{int((version / 100000) % 100)}'
+        self.patch: str = f'{int((version / 1000) % 100)}'
+        self.build: str = f'{version % 1000:03d}'
+
+    @property
+    def as_release(self) -> str:
+        return f'{self.major}.{self.minor}.{self.patch}/{self.build}'
+
+    @property
+    def as_numeric(self) -> int:
+        return self.version
+
+
 @dataclass(frozen=True)
 class DiveSample:
     vbatCV: int
@@ -107,7 +124,7 @@ class Dive:
     alarmDepth: float
     backlightLevel: int
     backlightMode: int
-    softwareVersion: int
+    softwareVersion: SoftwareVersion
     alertFlag: int
     freeUserSettings: int
     timezoneIdx: int
