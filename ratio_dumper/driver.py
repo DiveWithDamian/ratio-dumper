@@ -32,7 +32,7 @@ from typing import Tuple, Set, List, Optional, Type
 
 from serial import Serial
 
-from .models import Dive, DiveSample, DiveMode, WaterType, SoftwareVersion
+from .models import Dive, DiveSample, DiveMode, WaterType, SoftwareVersion, DecompressionAlgorithm
 from .utilities import ByteConverter, CrcHelper
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -133,7 +133,7 @@ class SerialDriver:
             activeMixHePercent=ByteConverter.to_uint8(payload.read(1)),
             suggestedMixO2Percent=ByteConverter.to_uint8(payload.read(1)),
             suggestedMixHePercent=ByteConverter.to_uint8(payload.read(1)),
-            activeAlgorithm=ByteConverter.to_uint8(payload.read(1)),
+            activeAlgorithm=DecompressionAlgorithm(ByteConverter.to_uint8(payload.read(1))),
             buhlGfHigh=ByteConverter.to_uint8(payload.read(1)),
             buhlGfLow=ByteConverter.to_uint8(payload.read(1)),
             vpmR0=ByteConverter.to_uint8(payload.read(1)),

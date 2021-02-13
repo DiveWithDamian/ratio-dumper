@@ -38,6 +38,10 @@ class WaterType(Enum):
     Fresh = 1
 
 
+class DecompressionAlgorithm(Enum):
+    Buhlman16B = 2
+
+
 class SoftwareVersion:
     def __init__(self, version: int) -> None:
         self.version: int = version
@@ -65,7 +69,7 @@ class DiveSample:
     activeMixHePercent: int
     suggestedMixO2Percent: int
     suggestedMixHePercent: int
-    activeAlgorithm: int
+    activeAlgorithm: DecompressionAlgorithm
     buhlGfHigh: int
     buhlGfLow: int
     vpmR0: int

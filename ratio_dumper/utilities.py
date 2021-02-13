@@ -152,7 +152,7 @@ def convert_to_xml(dive: Dive) -> str:
         SubElement(diveSample, 'activeMixHePercent').text = str(sample.activeMixHePercent)
         SubElement(diveSample, 'suggestedMixO2Percent').text = str(sample.suggestedMixO2Percent)
         SubElement(diveSample, 'suggestedMixHePercent').text = str(sample.suggestedMixHePercent)
-        SubElement(diveSample, 'activeAlgorithm').text = str(sample.activeAlgorithm)
+        SubElement(diveSample, 'activeAlgorithm').text = str(sample.activeAlgorithm.value)
         SubElement(diveSample, 'buhlGfHigh').text = str(sample.buhlGfHigh)
         SubElement(diveSample, 'buhlGfLow').text = str(sample.buhlGfLow)
         SubElement(diveSample, 'vpmR0').text = str(sample.vpmR0)
