@@ -32,7 +32,7 @@ from typing import Tuple, Set, List, Optional, Type
 
 from serial import Serial
 
-from .models import Dive, DiveSample, DiveMode
+from .models import Dive, DiveSample, DiveMode, WaterType
 from .utilities import ByteConverter, CrcHelper
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -193,7 +193,7 @@ class SerialDriver:
             safetyStopDepthDm=ByteConverter.to_uint8(payload.read(1)) / 100.0,
             safetyStopMin=ByteConverter.to_uint8(payload.read(1)),
             diveMode=DiveMode(ByteConverter.to_uint8(payload.read(1))),
-            water=ByteConverter.to_uint8(payload.read(1)),
+            water=WaterType(ByteConverter.to_uint8(payload.read(1))),
             alarmsGeneral=ByteConverter.to_uint8(payload.read(1)),
             alarmTime=ByteConverter.to_uint16(payload.read(2)),
             alarmDepth=ByteConverter.to_uint16(payload.read(2)) / 100.0,

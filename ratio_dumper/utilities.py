@@ -125,7 +125,7 @@ def convert_to_xml(dive: Dive) -> str:
     SubElement(segmentHeader, 'safetyStopDepthDm').text = str(int(dive.safetyStopDepthDm * 100))
     SubElement(segmentHeader, 'safetyStopMin').text = str(dive.safetyStopMin)
     SubElement(segmentHeader, 'diveMode').text = str(dive.diveMode.value)
-    SubElement(segmentHeader, 'water').text = str(dive.water)
+    SubElement(segmentHeader, 'water').text = str(dive.water.value)
     SubElement(segmentHeader, 'alarmsGeneral').text = str(dive.alarmsGeneral)
     SubElement(segmentHeader, 'alarmTime').text = str(dive.alarmTime)
     SubElement(segmentHeader, 'alarmDepth').text = str(int(dive.alarmDepth * 100))

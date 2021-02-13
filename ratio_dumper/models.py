@@ -33,6 +33,11 @@ class DiveMode(Enum):
     OC = 0
 
 
+class WaterType(Enum):
+    Salt = 0
+    Fresh = 1
+
+
 @dataclass(frozen=True)
 class DiveSample:
     vbatCV: int
@@ -96,7 +101,7 @@ class Dive:
     safetyStopDepthDm: float
     safetyStopMin: int
     diveMode: DiveMode
-    water: int
+    water: WaterType
     alarmsGeneral: int
     alarmTime: int
     alarmDepth: float
