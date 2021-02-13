@@ -191,13 +191,13 @@ def test_get_dive():
     dive = sd.get_dive(1)
 
     assert dive.diveSamples == 29
-    assert dive.avgDepth == 465
+    assert dive.avgDepth == 4.65
     assert dive.diveMode == 0
     assert dive.UTCStartingTimeS == 409911594
     assert dive.lastSurfaceTimeS == 4294967295
-    assert dive.depthMax == 891
+    assert dive.depthMax == 8.91
 
     assert dive.samples[0].runtimeS == 10
-    assert dive.samples[0].depthDm == 19
-    assert dive.samples[0].temperatureDc == 84
+    assert dive.samples[0].depthDm == 1.9
+    assert dive.samples[0].temperatureDc == 8.4
     assert dive.samples[0].NDLOrTTS == 32767

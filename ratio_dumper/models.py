@@ -32,8 +32,8 @@ from dataclasses import dataclass
 class DiveSample:
     vbatCV: int
     runtimeS: int
-    depthDm: int
-    temperatureDc: int
+    depthDm: float
+    temperatureDc: float
     activeMixO2Percent: int
     activeMixHePercent: int
     suggestedMixO2Percent: int
@@ -44,7 +44,7 @@ class DiveSample:
     vpmR0: int
     modeOCSCRCCRGauge: int
     maxPPO2OrSetpoint: int
-    firstStopDepth: int
+    firstStopDepth: float
     firstStopTime: int
     NDLOrTTS: int
     OTU: int
@@ -81,27 +81,27 @@ class Dive:
     surfacePressureMbar: int
     lastSurfaceTimeS: int
     desaturationTimeS: int
-    depthMax: int
-    decostopDepth1Dm: int
-    decostopDepth2Dm: int
+    depthMax: float
+    decostopDepth1Dm: float
+    decostopDepth2Dm: float
     decostopStep1Dm: int
     decostopStep2Dm: int
     decostopStep3Dm: int
     deepStopAlg: int
-    safetyStopDepthDm: int
+    safetyStopDepthDm: float
     safetyStopMin: int
     diveMode: int
     water: int
     alarmsGeneral: int
     alarmTime: int
-    alarmDepth: int
+    alarmDepth: float
     backlightLevel: int
     backlightMode: int
     softwareVersion: int
     alertFlag: int
     freeUserSettings: int
     timezoneIdx: int
-    avgDepth: int
+    avgDepth: float
     dum6: int
     dum7: int
     dum8: int
