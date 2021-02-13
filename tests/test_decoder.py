@@ -196,3 +196,8 @@ def test_get_dive():
     assert dive.UTCStartingTimeS == 409911594
     assert dive.lastSurfaceTimeS == 4294967295
     assert dive.depthMax == 891
+
+    assert dive.samples[0].runtimeS == 10
+    assert dive.samples[0].depthDm == 19
+    assert dive.samples[0].temperatureDc == 84
+    assert dive.samples[0].NDLOrTTS == 32767
