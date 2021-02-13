@@ -39,7 +39,10 @@ from .models import (Dive,
                      SoftwareVersion,
                      DecompressionAlgorithm,
                      DecompressionAlgorithmSettings,
-                     GasMix, DiveDecompressionSettings)
+                     GasMix,
+                     DiveDecompressionSettings,
+                     DecompressionAlgorithmBuhlmannSettings,
+                     DecompressionAlgorithmVpmSettings)
 from .utilities import ByteConverter, CrcHelper
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -146,9 +149,13 @@ class SerialDriver:
             ),
             active_algorithm=DecompressionAlgorithm(ByteConverter.to_uint8(payload.read(1))),
             algorithm_settings=DecompressionAlgorithmSettings(
-                buhlmann_gradient_factor_high=ByteConverter.to_uint8(payload.read(1)),
-                buhlmann_gradient_factor_low=ByteConverter.to_uint8(payload.read(1)),
-                vpm_r0=ByteConverter.to_uint8(payload.read(1)),
+                buhlmann=DecompressionAlgorithmBuhlmannSettings(
+                    gradient_factor_high=ByteConverter.to_uint8(payload.read(1)),
+                    gradient_factor_low=ByteConverter.to_uint8(payload.read(1)),
+                ),
+                vpm=DecompressionAlgorithmVpmSettings(
+                    r0=ByteConverter.to_uint8(payload.read(1)),
+                ),
             ),
             mode_oc_scr_ccr_gauge=ByteConverter.to_uint8(payload.read(1)),
             max_ppo2_or_setpoint=(ByteConverter.to_uint16(payload.read(2)) / 1000.0),

@@ -215,5 +215,5 @@ def test_get_dive():
     assert dive.samples[0].suggested_mix.mix == '21/0'
 
     assert dive.samples[0].active_algorithm == DecompressionAlgorithm.buhlmann_16b
-    assert dive.samples[0].algorithm_settings.buhlmann_gradient_factor_high == 80
-    assert dive.samples[0].algorithm_settings.buhlmann_gradient_factor_low == 30
+    assert dive.samples[0].algorithm_settings.buhlmann.gradient_factor_high == 80
+    assert dive.samples[0].algorithm_settings.buhlmann.gradient_factor_low == 30

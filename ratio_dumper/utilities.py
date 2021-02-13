@@ -172,12 +172,12 @@ def convert_to_xml(dive: Dive) -> str:
         )
         SubElement(diveSample, 'activeAlgorithm').text = str(sample.active_algorithm.value)
         SubElement(diveSample, 'buhlGfHigh').text = str(
-            sample.algorithm_settings.buhlmann_gradient_factor_high
+            sample.algorithm_settings.buhlmann.gradient_factor_high
         )
         SubElement(diveSample, 'buhlGfLow').text = str(
-            sample.algorithm_settings.buhlmann_gradient_factor_low
+            sample.algorithm_settings.buhlmann.gradient_factor_low
         )
-        SubElement(diveSample, 'vpmR0').text = str(sample.algorithm_settings.vpm_r0)
+        SubElement(diveSample, 'vpmR0').text = str(sample.algorithm_settings.vpm.r0)
         SubElement(diveSample, 'modeOCSCRCCRGauge').text = str(sample.mode_oc_scr_ccr_gauge)
         SubElement(diveSample, 'maxPPO2OrSetpoint').text = str(
             int(sample.max_ppo2_or_setpoint * 1000)

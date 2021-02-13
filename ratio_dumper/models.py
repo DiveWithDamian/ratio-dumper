@@ -76,10 +76,20 @@ class GasMix:
 
 
 @dataclass(frozen=True)
+class DecompressionAlgorithmVpmSettings:
+    r0: int
+
+
+@dataclass(frozen=True)
+class DecompressionAlgorithmBuhlmannSettings:
+    gradient_factor_low: int
+    gradient_factor_high: int
+
+
+@dataclass(frozen=True)
 class DecompressionAlgorithmSettings:
-    buhlmann_gradient_factor_low: int
-    buhlmann_gradient_factor_high: int
-    vpm_r0: int
+    buhlmann: DecompressionAlgorithmBuhlmannSettings
+    vpm: DecompressionAlgorithmVpmSettings
 
 
 @dataclass(frozen=True)
