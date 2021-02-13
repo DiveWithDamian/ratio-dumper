@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 from ratio_dumper import SerialDriver
+from ratio_dumper.models import DiveMode
 from tests.utilities import MockSerialIO
 
 
@@ -192,7 +193,7 @@ def test_get_dive():
 
     assert dive.diveSamples == 29
     assert dive.avgDepth == 4.65
-    assert dive.diveMode == 0
+    assert dive.diveMode == DiveMode.OC
     assert dive.UTCStartingTimeS == 409911594
     assert dive.lastSurfaceTimeS == 4294967295
     assert dive.depthMax == 8.91

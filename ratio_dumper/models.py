@@ -23,9 +23,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
+from enum import Enum
 from typing import List
 
 from dataclasses import dataclass
+
+
+class DiveMode(Enum):
+    OC = 0
 
 
 @dataclass(frozen=True)
@@ -90,7 +95,7 @@ class Dive:
     deepStopAlg: int
     safetyStopDepthDm: float
     safetyStopMin: int
-    diveMode: int
+    diveMode: DiveMode
     water: int
     alarmsGeneral: int
     alarmTime: int
