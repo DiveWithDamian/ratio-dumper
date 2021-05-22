@@ -1,3 +1,3 @@
 pyserial
 click
-crcmod
+crcmod==1.7
