@@ -1,3 +1,3 @@
 pyserial==3.5
-click
+click==8.0.1
 crcmod==1.7
