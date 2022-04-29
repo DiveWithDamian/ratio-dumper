@@ -28,7 +28,7 @@ from xml.dom import minidom
 from xml.etree import ElementTree
 from xml.etree.cElementTree import Element, SubElement
 
-from crcmod.predefined import mkCrcFun
+from crcmod.predefined import mkCrcFun  # type: ignore
 
 from .models import Dive
 
@@ -39,7 +39,7 @@ class CrcHelper:
     @staticmethod
     def calculate(payload: bytes) -> int:
         '''Calculate the CRC for a payload in bytes.'''
-        return mkCrcFun('crc-ccitt-false')(payload)
+        return int(mkCrcFun('crc-ccitt-false')(payload))
 
     @staticmethod
     def encode(crc: int) -> str:
@@ -57,35 +57,35 @@ class ByteConverter:
     def to_int8(data: bytes) -> int:
         """Convert 1 byte into an un-signed 8bit integer."""
         if len(data) != 1:
-            raise ValueError(f"to_int8 requires one bytes ({data})")
+            raise ValueError(f"to_int8 requires one bytes ({data!r})")
         return data[0]
 
     @staticmethod
     def to_uint8(data: bytes) -> int:
         """Convert 1 byte into a signed 8bit integer."""
         if len(data) != 1:
-            raise ValueError(f"to_uint8 requires one bytes ({data})")
+            raise ValueError(f"to_uint8 requires one bytes ({data!r})")
         return data[0] & 255
 
     @staticmethod
     def to_int16(data: bytes) -> int:
         """Convert 2 bytes into a signed 16bit integer."""
         if len(data) != 2:
-            raise ValueError(f"to_int16 requires two bytes ({data})")
+            raise ValueError(f"to_int16 requires two bytes ({data!r})")
         return (data[1] << 8) | (data[0] & 255)
 
     @staticmethod
     def to_uint16(data: bytes) -> int:
         """Convert 2 bytes into an un-signed 16bit integer."""
         if len(data) != 2:
-            raise ValueError(f"to_uint16 requires two bytes ({data})")
+            raise ValueError(f"to_uint16 requires two bytes ({data!r})")
         return ((data[1] & 255) << 8) | (data[0] & 255)
 
     @staticmethod
     def to_int32(data: bytes) -> int:
         """Convert 4 bytes into a signed 32bit integer."""
         if len(data) != 4:
-            raise ValueError(f"to_int32 requires four bytes ({data})")
+            raise ValueError(f"to_int32 requires four bytes ({data!r})")
         return (data[3] << 24 |
                 (data[2] & 255) << 16 |
                 (data[1] & 255) << 8 |
@@ -95,7 +95,7 @@ class ByteConverter:
     def to_uint32(data: bytes) -> int:
         """Convert 4 bytes into an un-signed 32bit integer."""
         if len(data) != 4:
-            raise ValueError(f"to_uint32 requires four bytes ({data})")
+            raise ValueError(f"to_uint32 requires four bytes ({data!r})")
         return ((data[3] & 255) << 24 |
                 (data[2] & 255) << 16 |
                 (data[1] & 255) << 8 |
@@ -216,5 +216,5 @@ def convert_to_xml(dive: Dive) -> str:
     xmlString = ElementTree.tostring(diveSegment, encoding='utf-8')
 
     # Re-format our string to be pretty
-    return minidom.parseString(xmlString).toprettyxml(encoding='UTF-8',
-                                                      indent='    ').decode().strip()
+    return str(minidom.parseString(xmlString).toprettyxml(encoding='UTF-8',
+                                                          indent='    ').decode().strip())

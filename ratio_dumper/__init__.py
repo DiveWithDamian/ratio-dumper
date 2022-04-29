@@ -27,4 +27,7 @@ from .driver import SerialDriver
 from .utilities import convert_to_xml
 
 __version__ = '0.0.1'
-__all__ = [SerialDriver, convert_to_xml]
+__all__ = [
+    "SerialDriver",
+    "convert_to_xml"
+]

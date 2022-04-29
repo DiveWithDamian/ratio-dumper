@@ -30,7 +30,7 @@ from io import BytesIO
 from types import TracebackType
 from typing import Tuple, Set, List, Optional, Type
 
-from serial import Serial
+from serial import Serial  # type: ignore
 
 from .models import (Dive,
                      DiveSample,
@@ -52,7 +52,6 @@ class SerialDriver:
     _serial: Serial
 
     def __init__(self, serial_path: Optional[str]) -> None:
-        # pyre-ignore[16]
         self._serial = Serial(port=serial_path, baudrate=115200, timeout=1)
 
     def __enter__(self) -> SerialDriver:
